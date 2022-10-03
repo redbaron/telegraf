@@ -174,7 +174,7 @@ func TestPodHasMatchingLabelSelector(t *testing.T) {
 }
 
 func TestPodHasMatchingFieldSelector(t *testing.T) {
-	fieldSelectorString := "status.podIP=127.0.0.1,spec.restartPolicy=Always,spec.NodeName!=nodeName"
+	fieldSelectorString := "status.podIP=127.0.0.1,spec.restartPolicy=Always,spec.NodeName!=nodeName,metadata.name=myPod"
 	prom := &Prometheus{Log: testutil.Logger{}, KubernetesFieldSelector: fieldSelectorString}
 	pod := pod()
 	pod.Spec.RestartPolicy = "Always"

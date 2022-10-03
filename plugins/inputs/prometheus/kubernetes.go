@@ -310,7 +310,7 @@ func podHasMatchingLabelSelector(pod *corev1.Pod, labelSelector labels.Selector)
 }
 
 /* See ToSelectableFields() for list of fields that are selectable:
- * https://github.com/kubernetes/kubernetes/release-1.20/pkg/registry/core/pod/strategy.go
+ * https://github.com/kubernetes/kubernetes/blob/v1.25.0/pkg/registry/core/pod/strategy.go
  * See docs on kubernetes field selectors:
  * https://kubernetes.io/docs/concepts/overview/working-with-objects/field-selectors/
  */
@@ -319,7 +319,7 @@ func podHasMatchingFieldSelector(pod *corev1.Pod, fieldSelector fields.Selector)
 		return true
 	}
 
-	fieldsSet := make(fields.Set)
+	fieldsSet := make(fields.Set, 9)
 	fieldsSet["spec.nodeName"] = pod.Spec.NodeName
 	fieldsSet["spec.restartPolicy"] = string(pod.Spec.RestartPolicy)
 	fieldsSet["spec.schedulerName"] = pod.Spec.SchedulerName
@@ -327,6 +327,9 @@ func podHasMatchingFieldSelector(pod *corev1.Pod, fieldSelector fields.Selector)
 	fieldsSet["status.phase"] = string(pod.Status.Phase)
 	fieldsSet["status.podIP"] = pod.Status.PodIP
 	fieldsSet["status.nominatedNodeName"] = pod.Status.NominatedNodeName
+
+	fieldsSet["metadata.name"] = pod.Name
+	fieldsSet["metadata.namespace"] = pod.Namespace
 
 	return fieldSelector.Matches(fieldsSet)
 }
